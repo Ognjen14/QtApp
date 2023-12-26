@@ -18,12 +18,20 @@ Window {
         Repeater {
             model: gridModel // Here we can control number of SquareObjects(Fuilds) inside matrix!
             SquareFuild{
-                width: root.width / 6
-                height: root.height / 6
+                id:root2
+                width: root.width / 10
+                height: root.height / 10 * 1.7
                 indexNumber: index + 1
                 idNumber: index + 1555
             }
         }
+    }
+    onWidthChanged: {
+
+    }
+
+    onHeightChanged: {
+
     }
     function addSquareFuild() {
 
@@ -40,7 +48,7 @@ Window {
 
     Component.onCompleted: {
        //Example
-        for (var i = 0; i < 10; i++) {
+        for (var i = 0; i < 20; i++) {
             addSquareFuild();
         }
     }
