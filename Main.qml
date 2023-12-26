@@ -16,7 +16,7 @@ Window {
         rowSpacing: 20
         anchors.centerIn: parent
         Repeater {
-            model: grid.rows * grid.columns
+            model: grid.rows * grid.columns // Here we can control number of SquareObjects(Fuilds) inside matrix!
             SquareFuild{
                 width: root.width / 6
                 height: root.height / 6
