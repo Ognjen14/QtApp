@@ -16,13 +16,32 @@ Window {
         rowSpacing: 20
         anchors.centerIn: parent
         Repeater {
-            model: grid.rows * grid.columns // Here we can control number of SquareObjects(Fuilds) inside matrix!
+            model: gridModel // Here we can control number of SquareObjects(Fuilds) inside matrix!
             SquareFuild{
                 width: root.width / 6
                 height: root.height / 6
                 indexNumber: index + 1
                 idNumber: index + 1555
             }
+        }
+    }
+    function addSquareFuild() {
+
+        var newItem = {
+            "index": gridModel.count,
+            "id": gridModel.count + 1555
+        }
+        gridModel.append(newItem);
+    }
+
+    ListModel {
+        id: gridModel
+    }
+
+    Component.onCompleted: {
+       //Example
+        for (var i = 0; i < 10; i++) {
+            addSquareFuild();
         }
     }
 }

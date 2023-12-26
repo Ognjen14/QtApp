@@ -188,7 +188,6 @@ Rectangle {
         onDetectorVoltageChanged:
         {
             detectorVoltageText.text = detectorVoltage
-
         }
     }
 

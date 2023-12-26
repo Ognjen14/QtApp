@@ -70,3 +70,16 @@ void SquareObject::setDetectorCurrent(double newDetectorCurrent)
     m_detectorCurrent = newDetectorCurrent;
     emit detectorCurrentChanged();
 }
+
+int SquareObject::idNumber() const
+{
+    return m_idNumber;
+}
+
+void SquareObject::setIdNumber(int newIdNumber)
+{
+    if (m_idNumber == newIdNumber)
+        return;
+    m_idNumber = newIdNumber;
+    emit idNumberChanged();
+}
