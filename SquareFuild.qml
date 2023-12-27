@@ -23,6 +23,7 @@ Item {
         rowSpacing: 20
         anchors.centerIn: parent
         Repeater {
+            id: repeaterID
             model: 20 // Here we can control number of SquareObjects(Fuilds) inside matrix!
 
             Rectangle {
@@ -32,7 +33,8 @@ Item {
                 color: statusColor
                 border.color: "black"
                 border.width: 3
-
+                property string statusState: "SUSPENDED"
+                property string statusColor : "red"
                 Text
                 {
                     anchors.top: parent.top
@@ -49,6 +51,7 @@ Item {
                     border.color: "black"
                     border.width: 3
 
+                    /* Text ID Component */
                     Text {
                         anchors
                         {
@@ -60,6 +63,7 @@ Item {
                         text: "Tray 1: ID " + 1555 + index
 
                     }
+                    /* Text index Number of SquareFuild */
                     Text {
                         anchors
                         {
@@ -73,6 +77,7 @@ Item {
                         font.bold : true
                     }
 
+                    /* Column of SquareFuild information */
                     Column
                     {
                         anchors {
@@ -95,6 +100,7 @@ Item {
                             text: "Rem.time:"
                         }
                     }
+                    /* Column of SquareFuild content information */
                     Column
                     {
                         anchors {
@@ -129,6 +135,7 @@ Item {
                             text: "00:00:00"
                         }
                     }
+                     /* Column of SquareFuild content information */
                     Column
                     {
                         anchors {
@@ -156,6 +163,7 @@ Item {
                         }
                     }
 
+                     /* Row of SquareFuild control buttons*/
                     Row {
                         anchors {
                             bottom: parent.bottom
@@ -165,20 +173,17 @@ Item {
                         Button {
                             text: "Run"
                             onClicked: {
-                                console.log("Run button clicked")
-                                statusState = "RUNNING"
-                                statusColor = "lightgreen"
-
+                                console.log("Run button clicked for index:", index)
+                                repeaterID.itemAt(index).statusState = "RUNNING"
+                                repeaterID.itemAt(index).statusColor = "lightgreen"
                             }
                         }
                         Button {
                             text: "Suspend"
                             onClicked: {
-
-                                console.log("Suspend button clicked")
-                                statusState = "SUSPENDED"
-                                statusColor = "red"
-
+                                console.log("Suspend button clicked for index:", index)
+                                repeaterID.itemAt(index).statusState = "SUSPENDED"
+                                repeaterID.itemAt(index).statusColor = "red"
                             }
                         }
                     }
@@ -186,6 +191,7 @@ Item {
             }
         }
     }
+    /* RunTime Timer */
     Timer {
         id: timerRunTime
         interval: 1000
@@ -264,22 +270,20 @@ Item {
     ListModel {
         id: gridModel
     }
+
     function printProperties() {
         console.log("coolerCurrent:");
         for (var i = 0; i < coolerCurrent.length; i++) {
             console.log(coolerCurrent[i]);
         }
-
         console.log("coolerVoltage:");
         for (var j = 0; j < coolerVoltage.length; j++) {
             console.log(coolerVoltage[j]);
         }
-
         console.log("detectorCurrent:");
         for (var k = 0; k < detectorCurrent.length; k++) {
             console.log(detectorCurrent[k]);
         }
-
         console.log("detectorVoltage:");
         for (var m = 0; m < detectorVoltage.length; m++) {
             console.log(detectorVoltage[m]);
