@@ -13,7 +13,6 @@ Item {
     property real  coolerCurrent: 0
     property real  coolerVoltage: 0
 
-
     GridLayout {
         id: grid
         rows: 5
@@ -85,7 +84,7 @@ Item {
                             text: "Cooler:"
                         }
                         Text {
-                            text: "Detectir:"
+                            text: "Detector:"
                         }
                         Text {
                             text: "Runtime:"
