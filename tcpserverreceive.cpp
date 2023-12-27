@@ -35,38 +35,52 @@ void tcpServerReceive::onNewConnection()
 
 void tcpServerReceive::onReadyRead()
 {
-    const int values_count = 20; // Number of values for both current and voltage
-    const int total_values = values_count * 2; // Total number of values (10 current + 10 voltage)
-    // Extract current and voltage values into QList<double>
-    QList<double> current_values;
-    QList<double> voltage_values;
+    const int values_count = 20; // Total number of values for each type
+
     for (QTcpSocket *socket : qAsConst(clientSockets)) {
-        if (socket->bytesAvailable() >= sizeof(double) * total_values) {
-            QByteArray data = socket->read(sizeof(double) * total_values);
+        if (socket->bytesAvailable() >= sizeof(double) * values_count * 4) { // Total size for all four data types
+            QByteArray data = socket->read(sizeof(double) * values_count * 4); // Read all four data types
 
-            if (data.size() == sizeof(double) * total_values) {
-                double received_values[total_values];
+            if (data.size() == sizeof(double) * values_count * 4) {
+                double received_values[values_count * 4];
+                memcpy(&received_values, data.constData(), sizeof(double) * values_count * 4);
 
-                memcpy(&received_values, data.constData(), sizeof(double) * total_values);
-
-
+                QList<double> cooler_current;
+                QList<double> cooler_voltage;
+                QList<double> detector_current;
+                QList<double> detector_voltage;
 
                 for (int i = 0; i < values_count; ++i) {
-                    double current = round(received_values[i] * 100.0) / 100.0;
-                    double voltage = round(received_values[values_count + i] * 100.0) / 100.0;
-                    current_values.append(current);
-                    voltage_values.append(voltage);
-                    qInfo() << current_values[i];
-
-
+                    cooler_current.append(round(received_values[i] * 100.0) / 100.0);
+                    cooler_voltage.append(round(received_values[values_count + i] * 100.0) / 100.0);
+                    detector_current.append(round(received_values[2 * values_count + i] * 100.0) / 100.0);
+                    detector_voltage.append(round(received_values[3 * values_count + i] * 100.0) / 100.0);
                 }
+
+                emit messageReceived(cooler_current, cooler_voltage, detector_current, detector_voltage);
+                qDebug() << "cooler_current:";
+                printLists(cooler_current);
+
+                qDebug() << "cooler_voltage:";
+                printLists(cooler_voltage);
+
+                qDebug() << "detector_current:";
+                printLists(detector_current);
+
+                qDebug() << "detector_voltage:";
+                printLists(detector_voltage);
             } else {
                 qInfo() << "Incomplete data received";
             }
-            emit messageReceived(current_values, voltage_values);
         }
     }
 }
+void tcpServerReceive::printLists(const QList<double>& list) {
+    for (const auto& value : list) {
+        qDebug() << value;
+    }
+}
+
 
 
 

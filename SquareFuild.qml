@@ -12,6 +12,8 @@ Item {
     property string runTime : "00:00:00"
     property var  coolerCurrent:[]
     property var  coolerVoltage:[]
+    property var  detectorCurrent:[]
+    property var  detectorVoltage:[]
 
     GridLayout {
         id: grid
@@ -75,7 +77,7 @@ Item {
                     {
                         anchors {
                             top: parent.top
-                            topMargin: 25
+                            topMargin: 30
                             leftMargin: 5
                             left: parent.left
                         }
@@ -97,18 +99,26 @@ Item {
                     {
                         anchors {
                             top: parent.top
-                            topMargin: 25
+                            topMargin: 30
                             leftMargin: 75
                             left: parent.left
                         }
 
                         Text {
                             id: coolerCurrentText
-                            text: coolerCurrent[index]+ " A"
+                            text:   if (coolerCurrent && coolerCurrent[index]) {
+                                        return coolerCurrent[index] + " A";
+                                    } else {
+                                        return "0";
+                                    }
                         }
                         Text {
                             id: detectorCurrentText
-                            text: 0 + " A"
+                            text:   if (detectorCurrent && detectorCurrent[index]) {
+                                        return detectorCurrent[index] + " A";
+                                    } else {
+                                        return "0";
+                                    }
                         }
                         Text {
                             id: runtimeText
@@ -123,18 +133,26 @@ Item {
                     {
                         anchors {
                             top: parent.top
-                            topMargin: 25
+                            topMargin: 30
                             leftMargin: 125
                             left: parent.left
                         }
 
                         Text {
                             id:coolerVoltageText
-                            text: coolerVoltage[index] + " V"
+                            text:      if (coolerVoltage && coolerVoltage[index]) {
+                                           return coolerVoltage[index] + " V";
+                                       } else {
+                                           return "0";
+                                       }
                         }
                         Text {
                             id: detectorVoltageText
-                            text: 0 + " V"
+                            text:      if (detectorVoltage && detectorVoltage[index]) {
+                                           return detectorVoltage[index] + " V";
+                                       } else {
+                                           return "0";
+                                       }
                         }
                     }
 
@@ -220,19 +238,18 @@ Item {
         }
         receive.startServer(1234)
     }
-    Receive
-    {
+    Receive {
         id: receive
-        onMessageReceived:
-        {
-             handleReceivedData(currents, voltages);
+
+        onMessageReceived: function handleReceivedData(cooler_current, cooler_voltage, detector_current, detector_voltage) {
+            coolerCurrent = cooler_current;
+            coolerVoltage = cooler_voltage;
+            detectorCurrent = detector_current;
+            detectorVoltage = detector_voltage;
+            printProperties()
         }
-        function handleReceivedData(currents, voltages) {
-             // Handle the received data here
-             coolerCurrent = currents;
-             coolerVoltage = voltages;
-         }
     }
+
 
     /* Probably wont be nessesery to have this */
     function addSquareFuild() {
@@ -246,6 +263,27 @@ Item {
     /* Probably wont be nessesery to have this */
     ListModel {
         id: gridModel
+    }
+    function printProperties() {
+        console.log("coolerCurrent:");
+        for (var i = 0; i < coolerCurrent.length; i++) {
+            console.log(coolerCurrent[i]);
+        }
+
+        console.log("coolerVoltage:");
+        for (var j = 0; j < coolerVoltage.length; j++) {
+            console.log(coolerVoltage[j]);
+        }
+
+        console.log("detectorCurrent:");
+        for (var k = 0; k < detectorCurrent.length; k++) {
+            console.log(detectorCurrent[k]);
+        }
+
+        console.log("detectorVoltage:");
+        for (var m = 0; m < detectorVoltage.length; m++) {
+            console.log(detectorVoltage[m]);
+        }
     }
 
 

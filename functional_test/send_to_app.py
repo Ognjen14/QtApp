@@ -4,14 +4,15 @@ import struct
 import random
 
 def generate_random_data():
-    current_values = [random.uniform(1.0, 2.0) for _ in range(20)]
-    voltage_values = [random.uniform(1.0, 2.0) for _ in range(20)]
-    return current_values, voltage_values
+    cooler_current = [random.uniform(1.0, 5.0) for _ in range(20)]
+    cooler_voltage = [random.uniform(1.0, 5.0) for _ in range(20)]
+    detector_current = [random.uniform(1.0, 5.0) for _ in range(20)]
+    detector_voltage = [random.uniform(1.0, 5.0) for _ in range(20)]
+    return cooler_current, cooler_voltage, detector_current, detector_voltage
 
 def send_data():
-    host = '192.168.1.11'  
-    port = 1234 
-
+    host = '192.168.1.11'
+    port = 1234
 
     client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     client_socket.connect((host, port))
@@ -19,17 +20,20 @@ def send_data():
     print(f"Connected to {host}:{port}")
 
     while True:
-        currents, voltages = generate_random_data()
-
+        cooler_current, cooler_voltage, detector_current, detector_voltage = generate_random_data()
 
         for i in range(10):
-            current_bytes = struct.pack('d', currents[i])
-            voltage_bytes = struct.pack('d', voltages[i])
+            cooler_current_bytes = struct.pack('d', cooler_current[i])
+            cooler_voltage_bytes = struct.pack('d', cooler_voltage[i])
+            detector_current_bytes = struct.pack('d', detector_current[i])
+            detector_voltage_bytes = struct.pack('d', detector_voltage[i])
 
-            client_socket.sendall(current_bytes)
-            client_socket.sendall(voltage_bytes)
+            client_socket.sendall(cooler_current_bytes)
+            client_socket.sendall(cooler_voltage_bytes)
+            client_socket.sendall(detector_current_bytes)
+            client_socket.sendall(detector_voltage_bytes)
 
-        time.sleep(1) 
+        time.sleep(1)
 
     client_socket.close()
 

@@ -14,7 +14,7 @@ public:
     Q_INVOKABLE void stopServer();
 signals:
 signals:
-    void messageReceived( QList<double> currents,  QList<double> voltages);
+    void messageReceived( QList<double> cooler_current,  QList<double> cooler_voltage, QList<double> detector_current,  QList<double> detector_voltage);
 
 private slots:
     void onNewConnection();
@@ -23,6 +23,7 @@ private slots:
 private:
     QTcpServer server;
     QList<QTcpSocket*> clientSockets;
+    void printLists(const QList<double> &list);
 };
 
 #endif // TCPSERVERRECEIVE_H
