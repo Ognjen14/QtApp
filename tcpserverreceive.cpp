@@ -35,12 +35,10 @@ void tcpServerReceive::onNewConnection()
 
 void tcpServerReceive::onReadyRead()
 {
-    const int values_count = 20; // Total number of values for each type
-
+    const int values_count = 20;
     for (QTcpSocket *socket : qAsConst(clientSockets)) {
-        if (socket->bytesAvailable() >= sizeof(double) * values_count * 4) { // Total size for all four data types
-            QByteArray data = socket->read(sizeof(double) * values_count * 4); // Read all four data types
-
+        if (socket->bytesAvailable() >= sizeof(double) * values_count * 4) {
+            QByteArray data = socket->read(sizeof(double) * values_count * 4);
             if (data.size() == sizeof(double) * values_count * 4) {
                 double received_values[values_count * 4];
                 memcpy(&received_values, data.constData(), sizeof(double) * values_count * 4);

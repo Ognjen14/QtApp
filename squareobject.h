@@ -1,5 +1,4 @@
-#ifndef SQUAREOBJECT_H
-#define SQUAREOBJECT_H
+#pragma once
 
 #include <QObject>
 #include <QString>
@@ -56,4 +55,3 @@ private:
     int m_idNumber;
 };
 
-#endif // SQUAREOBJECT_H

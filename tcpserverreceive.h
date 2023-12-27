@@ -1,9 +1,9 @@
-#ifndef TCPSERVERRECEIVE_H
-#define TCPSERVERRECEIVE_H
+#pragma once
 
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include "string.h"
 class tcpServerReceive : public QObject
 {
     Q_OBJECT
@@ -26,4 +26,4 @@ private:
     void printLists(const QList<double> &list);
 };
 
-#endif // TCPSERVERRECEIVE_H
+
