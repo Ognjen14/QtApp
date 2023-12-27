@@ -2,11 +2,14 @@ import QtQuick
 import QtQuick.Window
 import QtQuick.Controls
 import QtQuick.Layouts
+import TcpServer 1.0
 Window {
     id:root
     visible: true
     width: 1920
     height: 1080
+    minimumHeight: 1000
+    minimumWidth: 1000
 
     GridLayout {
         id: grid
@@ -19,20 +22,20 @@ Window {
             model: gridModel // Here we can control number of SquareObjects(Fuilds) inside matrix!
             SquareFuild{
                 id:root2
-                width: root.width / 10
-                height: root.height / 10 * 1.7
+                width: 1920 / 10
+                height: 1080 / 10 * 1.7
                 indexNumber: index + 1
                 idNumber: index + 1555
             }
         }
     }
     onWidthChanged: {
-
     }
 
     onHeightChanged: {
 
     }
+
     function addSquareFuild() {
 
         var newItem = {
@@ -52,6 +55,8 @@ Window {
             addSquareFuild();
         }
     }
+
+
 }
 
 

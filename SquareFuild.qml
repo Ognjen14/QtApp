@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import SquareObject 1.0
+import TcpServer 1.0
 Rectangle {
     id: rectOutside
     property string statusState: "SUSPENDED"
@@ -189,6 +190,22 @@ Rectangle {
         {
             detectorVoltageText.text = detectorVoltage
         }
+    }
+
+    Receive
+    {
+        id: receive
+        onMessageReceived:
+        {
+            coolerCurrentText.text = current + " A"
+            coolerVoltageText.text = voltage + " V"
+            console.log(current)
+        }
+    }
+
+    Component.onCompleted:
+    {
+        receive.startServer(1234)
     }
 
 }
