@@ -6,12 +6,12 @@ import QtQuick.Layouts
 Item {
     property string statusState: "SUSPENDED"
     property string statusColor : "red"
-    property real indexNumber : 1
+    property real indexNumber : 0
     property real idNumber: 1555
     property var startTime: new Date()
     property string runTime : "00:00:00"
-    property real  coolerCurrent: 0
-    property real  coolerVoltage: 0
+    property var  coolerCurrent:[]
+    property var  coolerVoltage:[]
 
     GridLayout {
         id: grid
@@ -55,7 +55,7 @@ Item {
                             leftMargin: 5
                             left: parent.left
                         }
-                        text: "Tray 1: ID" + index + 1555
+                        text: "Tray 1: ID " + 1555 + index
 
                     }
                     Text {
@@ -104,7 +104,7 @@ Item {
 
                         Text {
                             id: coolerCurrentText
-                            text: coolerCurrent+ " A"
+                            text: coolerCurrent[index]+ " A"
                         }
                         Text {
                             id: detectorCurrentText
@@ -130,7 +130,7 @@ Item {
 
                         Text {
                             id:coolerVoltageText
-                            text: coolerVoltage + " V"
+                            text: coolerVoltage[index] + " V"
                         }
                         Text {
                             id: detectorVoltageText
@@ -225,10 +225,13 @@ Item {
         id: receive
         onMessageReceived:
         {
-            coolerCurrent = current
-            coolerVoltage = voltage
-            console.log(current)
+             handleReceivedData(currents, voltages);
         }
+        function handleReceivedData(currents, voltages) {
+             // Handle the received data here
+             coolerCurrent = currents;
+             coolerVoltage = voltages;
+         }
     }
 
     /* Probably wont be nessesery to have this */

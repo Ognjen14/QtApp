@@ -35,25 +35,38 @@ void tcpServerReceive::onNewConnection()
 
 void tcpServerReceive::onReadyRead()
 {
+    const int values_count = 20; // Number of values for both current and voltage
+    const int total_values = values_count * 2; // Total number of values (10 current + 10 voltage)
+    // Extract current and voltage values into QList<double>
+    QList<double> current_values;
+    QList<double> voltage_values;
     for (QTcpSocket *socket : qAsConst(clientSockets)) {
-        if (socket->bytesAvailable() >= sizeof(double) * 2) {
-            QByteArray data = socket->read(sizeof(double) * 2);
+        if (socket->bytesAvailable() >= sizeof(double) * total_values) {
+            QByteArray data = socket->read(sizeof(double) * total_values);
 
-            if (data.size() == sizeof(double) * 2) {
-                double received_values[2];
+            if (data.size() == sizeof(double) * total_values) {
+                double received_values[total_values];
 
-                memcpy(&received_values, data.constData(), sizeof(double) * 2);
+                memcpy(&received_values, data.constData(), sizeof(double) * total_values);
 
-                double value1 = received_values[0];
-                double value2 = received_values[1];
 
-                value1 = round(value1 * 100.0) / 100.0;
-                value2 = round(value2 * 100.0) / 100.0;
-                emit messageReceived(value1, value2);
+
+                for (int i = 0; i < values_count; ++i) {
+                    double current = round(received_values[i] * 100.0) / 100.0;
+                    double voltage = round(received_values[values_count + i] * 100.0) / 100.0;
+                    current_values.append(current);
+                    voltage_values.append(voltage);
+                    qInfo() << current_values[i];
+
+
+                }
             } else {
                 qInfo() << "Incomplete data received";
             }
+            emit messageReceived(current_values, voltage_values);
         }
     }
 }
+
+
 

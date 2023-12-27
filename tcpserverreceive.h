@@ -7,13 +7,14 @@
 class tcpServerReceive : public QObject
 {
     Q_OBJECT
+
 public:
     explicit tcpServerReceive(QObject *parent = nullptr);
     Q_INVOKABLE bool startServer(quint16 port);
     Q_INVOKABLE void stopServer();
 signals:
 signals:
-    void messageReceived(const double current, const double voltage);
+    void messageReceived( QList<double> currents,  QList<double> voltages);
 
 private slots:
     void onNewConnection();
