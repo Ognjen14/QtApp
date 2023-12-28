@@ -21,8 +21,8 @@ set(QT_LIBRARY Qt${QT_VERSION_MAJOR}::Core
 
 find_package(QT NAMES  Qt6 CONFIG REQUIRED COMPONENTS Core Network Gui Quick Test)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Gui Quick Test)
+
 set(CMAKE_AUTOMOC TRUE)
-set(CMAKE_AUTORCC TRUE)
 
 add_library(ClientMonitoringLib SHARED ${LIBRARY_HEADER} ${LIBRARY_QML})
 target_link_libraries(ClientMonitoringLib ${QT_LIBRARY})
