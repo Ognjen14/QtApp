@@ -237,6 +237,7 @@ Item {
             detectorVoltageText.text = detectorVoltage
         }
     }
+
     Component.onCompleted: {
         //Example
         for (var i = 0; i < 20; i++) {
@@ -244,6 +245,7 @@ Item {
         }
         receive.startServer(1234)
     }
+
     Receive {
         id: receive
 
@@ -255,7 +257,6 @@ Item {
             printProperties()
         }
     }
-
 
     /* Probably wont be nessesery to have this */
     function addSquareFuild() {
