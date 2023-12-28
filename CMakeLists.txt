@@ -3,42 +3,26 @@ cmake_minimum_required(VERSION 3.16)
 project(QtApp VERSION 0.1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-find_package(Qt6 6.4 REQUIRED COMPONENTS Quick)
+set(LIBRARY_SOURCE squareobject.cpp tcpserverreceive.cpp)
+set(LIBRARY_HEADER squareobject.h tcpserverreceive.h)
+set(LIBRARY_QML ${CMAKE_CURRENT_SOURCE_DIR}/Main.qml
+                ${CMAKE_CURRENT_SOURCE_DIR}/SquareFuild.qml )
+set(EXE_SOURCE main.cpp)
 
-qt_standard_project_setup()
+find_package(QT NAMES  Qt6 CONFIG REQUIRED COMPONENTS Core Network Gui Quick)
+find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Gui Quick)
+set(CMAKE_AUTOMOC TRUE)
+set(CMAKE_AUTORCC TRUE)
 
-qt_add_executable(appQtApp
-    main.cpp
-)
+add_library(ClientMonitoringLib SHARED ${LIBRARY_HEADER} ${LIBRARY_QML})
+target_link_libraries(ClientMonitoringLib Qt${QT_VERSION_MAJOR}::Core Qt${QT_VERSION_MAJOR}::Network Qt${QT_VERSION_MAJOR}::Gui Qt${QT_VERSION_MAJOR}::Quick)
 
-qt_add_qml_module(appQtApp
-    URI QtApp
-    VERSION 1.0
-    QML_FILES Main.qml
-    QML_FILES SquareFuild.qml
-    SOURCES squareobject.h squareobject.cpp
-    SOURCES tcpserverreceive.h tcpserverreceive.cpp
-)
+add_executable(ClientMonitoring ${EXE_SOURCE} ${LIBRARY_SOURCE})
 
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-set_target_properties(appQtApp PROPERTIES
-#    MACOSX_BUNDLE_GUI_IDENTIFIER com.example.appQtApp
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
-)
+target_link_libraries(ClientMonitoring ClientMonitoringLib)
 
-target_link_libraries(appQtApp
-    PRIVATE Qt6::Quick
-)
+qt_standard_project_setup(REQUIRES 6.5)
 
-include(GNUInstallDirs)
-install(TARGETS appQtApp
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
-)
+

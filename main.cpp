@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<tcpServerReceive>("TcpServer",1,0,"Receive");
     qmlRegisterType<SquareObject>("SquareObject",1 , 0, "SquareObjectInfo");
 
-    const QUrl url(u"qrc:/QtApp/Main.qml"_qs);
+    const QUrl url(u"Main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
