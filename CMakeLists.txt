@@ -24,10 +24,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Gui Quick Te
 
 set(CMAKE_AUTOMOC TRUE)
 
-add_library(ClientMonitoringLib SHARED ${LIBRARY_HEADER} ${LIBRARY_QML})
+add_library(ClientMonitoringLib SHARED ${LIBRARY_HEADER} ${LIBRARY_QML} ${LIBRARY_SOURCE})
 target_link_libraries(ClientMonitoringLib ${QT_LIBRARY})
 
-add_executable(ClientMonitoring ${EXE_SOURCE} ${LIBRARY_SOURCE})
+add_executable(ClientMonitoring ${EXE_SOURCE})
 
 target_link_libraries(ClientMonitoring ClientMonitoringLib)
 

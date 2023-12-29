@@ -1,47 +1,66 @@
 #include <QtTest>
-/* This is test of test */
-class test1 : public QObject
-{
+#include "../squareobject.h"
+
+class test1 : public QObject {
     Q_OBJECT
 
-public:
-    test1();
-    ~test1();
-
 private slots:
-    void test_case1();
-    void test_case2();
-    void test_case3();
-    void test_case4();
+
+    void testBorderColor() {
+         // Test case for borderColor and setBorderColor functions
+        SquareObject obj;
+
+        // Initially, borderColor should be empty
+        QCOMPARE(obj.borderColor(), QString());
+
+        // Test setting and getting borderColor
+        const QString newColor = "#FF0000";
+        obj.setBorderColor(newColor);
+        QCOMPARE(obj.borderColor(), newColor);
+    }
+
+    // Test case for coolerCurrent and setCoolerCurrent functions
+    void testCoolerCurrent() {
+        SquareObject obj;
+
+        // Initially, coolerCurrent should be 0.0
+        QCOMPARE(obj.coolerCurrent(), 0.0);
+
+        // Test setting and getting coolerCurrent
+        const double newCurrent = 25.0;
+        obj.setCoolerCurrent(newCurrent);
+        QCOMPARE(obj.coolerCurrent(), newCurrent);
+
+        // Test that emitting signal works
+        QSignalSpy spy(&obj, SIGNAL(coolerCurrentChanged()));
+        obj.setCoolerCurrent(newCurrent);
+        QCOMPARE(spy.count(), 0); // No signal emitted since value didn't change
+
+        obj.setCoolerCurrent(30.0);
+        QCOMPARE(spy.count(), 1); // Signal emitted after value changed
+    }
+
+    // Test case for coolerVoltage and setCoolerVoltage functions
+    void testCoolerVoltage() {
+        SquareObject obj;
+
+        // Initially, coolerVoltage should be 0.0
+        QCOMPARE(obj.coolerVoltage(), 0.0);
+
+        // Test setting and getting coolerVoltage
+        const double newVoltage = 12.5;
+        obj.setCoolerVoltage(newVoltage);
+        QCOMPARE(obj.coolerVoltage(), newVoltage);
+
+        // Test that emitting signal works
+        QSignalSpy spy(&obj, SIGNAL(coolerVoltageChanged()));
+        obj.setCoolerVoltage(newVoltage);
+        QCOMPARE(spy.count(), 0); // No signal emitted since value didn't change
+
+        obj.setCoolerVoltage(15.0);
+        QCOMPARE(spy.count(), 1); // Signal emitted after value changed
+    }
 };
-
-test1::test1(){ }
-
-test1::~test1(){ }
-
-void test1::test_case1()
-{
-    QVERIFY2(2 + 2 == 4, "Incorrect addition result!");
-}
-
-void test1::test_case2()
-{
-
-    QString str = "Hello";
-    QVERIFY2(!str.isEmpty(), "String should not be empty!");
-}
-
-void test1::test_case3()
-{
-    QVector<int> vec;
-    QCOMPARE(vec.size(), 0);
-}
-
-void test1::test_case4()
-{
-    // Failing test case on purpose
-    QVERIFY2(5 * 5 == 30, "Incorrect multiplication result!");
-}
 
 QTEST_APPLESS_MAIN(test1)
 

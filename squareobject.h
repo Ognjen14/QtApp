@@ -14,6 +14,7 @@ class SquareObject : public QObject
     Q_PROPERTY(double detectorVoltage READ detectorVoltage WRITE setDetectorVoltage NOTIFY detectorVoltageChanged)
 public:
     explicit SquareObject(QObject *parent = nullptr);
+    virtual ~SquareObject() = default;
 
     QString borderColor() const;
     void setBorderColor(const QString &newBorderColor);
