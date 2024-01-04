@@ -8,8 +8,7 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 set(LIBRARY_SOURCE squareobject.cpp tcpserverreceive.cpp)
 set(LIBRARY_HEADER squareobject.h tcpserverreceive.h)
 
-set(LIBRARY_QML ${CMAKE_CURRENT_SOURCE_DIR}/Main.qml
-                ${CMAKE_CURRENT_SOURCE_DIR}/SquareFuild.qml )
+set(MAIN_QML ${CMAKE_CURRENT_SOURCE_DIR}/Main.qml)
 
 set(EXE_SOURCE main.cpp)
 
@@ -24,7 +23,7 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core Network Gui Quick Te
 
 set(CMAKE_AUTOMOC TRUE)
 
-add_library(ClientMonitoringLib SHARED ${LIBRARY_HEADER} ${LIBRARY_QML} ${LIBRARY_SOURCE})
+add_library(ClientMonitoringLib SHARED ${LIBRARY_HEADER} ${MAIN_QML} ${LIBRARY_SOURCE})
 target_link_libraries(ClientMonitoringLib ${QT_LIBRARY})
 
 add_executable(ClientMonitoring ${EXE_SOURCE})
@@ -34,3 +33,11 @@ target_link_libraries(ClientMonitoring ClientMonitoringLib)
 qt_standard_project_setup(REQUIRES 6.5)
 
 add_subdirectory(test_ClientMonitoring)
+
+qt_add_qml_module(ClientMonitoringLibQML
+    URI
+    hello
+    QML_FILES
+        Main.qml
+        SquareFuild.qml
+)
