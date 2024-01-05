@@ -35,9 +35,10 @@ qt_standard_project_setup(REQUIRES 6.5)
 add_subdirectory(test_ClientMonitoring)
 
 qt_add_qml_module(ClientMonitoringLibQML
-    URI
-    hello
+    URI QtApp
+    VERSION 0.1
     QML_FILES
         Main.qml
         SquareFuild.qml
 )
+
