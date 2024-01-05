@@ -4,6 +4,7 @@ import SquareObject 1.0
 import TcpServer 1.0
 import QtQuick.Layouts
 Item {
+    id: squareObjectID
     property string statusState: "SUSPENDED"
     property string statusColor : "red"
     property real indexNumber : 0
@@ -14,6 +15,8 @@ Item {
     property var  coolerVoltage:[]
     property var  detectorCurrent:[]
     property var  detectorVoltage:[]
+    property bool receivedAll: false
+    signal squareObjectOn()
 
     GridLayout {
         id: grid
@@ -35,6 +38,17 @@ Item {
                 border.width: 3
                 property string statusState: "SUSPENDED"
                 property string statusColor : "red"
+                Connections
+                {
+                    target:squareObjectID
+                    function onSquareObjectOn (){
+                        console.log("All running")
+                        statusColor = "lightgreen"
+                        statusState = "RUNNING"
+
+                    }
+                }
+
                 Text
                 {
                     anchors.top: parent.top
@@ -135,7 +149,7 @@ Item {
                             text: "00:00:00"
                         }
                     }
-                     /* Column of SquareFuild content information */
+                    /* Column of SquareFuild content information */
                     Column
                     {
                         anchors {
@@ -163,7 +177,7 @@ Item {
                         }
                     }
 
-                     /* Row of SquareFuild control buttons*/
+                    /* Row of SquareFuild control buttons*/
                     Row {
                         anchors {
                             bottom: parent.bottom
@@ -184,6 +198,7 @@ Item {
                                 console.log("Suspend button clicked for index:", index)
                                 repeaterID.itemAt(index).statusState = "SUSPENDED"
                                 repeaterID.itemAt(index).statusColor = "red"
+
                             }
                         }
                     }
@@ -193,22 +208,27 @@ Item {
     }
     /* RunTime Timer */
     Timer {
-        id: timerRunTime
-        interval: 1000
-        running: true
-        repeat: true
+        id: timerRunTime // Unique identifier for the Timer component
+        interval: 1000 // Interval set to trigger every 1000 milliseconds (1 second)
+        running: true // Starts the timer immediately when the component is loaded
+        repeat: true // Specifies that the timer will repeat
+
+        // Handler executed when the timer triggers
         onTriggered: {
+            // Calculate elapsed time since 'startTime' in hours, minutes, and seconds
             var currentTime = new Date();
             var elapsedSeconds = Math.floor((currentTime.getTime() - startTime.getTime()) / 1000);
-
             var hours = Math.floor(elapsedSeconds / 3600);
             var minutes = Math.floor((elapsedSeconds % 3600) / 60);
             var seconds = elapsedSeconds % 60;
 
+            // Format and assign the elapsed time to the 'runTime' property
             runTime = displayTwoDigits(hours) + ":" + displayTwoDigits(minutes) + ":" + displayTwoDigits(seconds);
         }
+
     }
 
+    // Function to display a number with two digits by adding a leading zero if necessary
     function displayTwoDigits(number) {
         return (number < 10) ? "0" + number : number;
     }
@@ -238,23 +258,32 @@ Item {
         }
     }
 
+    // Executed when the component is completed and ready
     Component.onCompleted: {
-        //Example
-        for (var i = 0; i < 20; i++) {
-            addSquareFuild();
-        }
-        receive.startServer(1234)
+        // Initiates the server start process for the 'receive' component on port 1234
+        receive.startServer(1234);
     }
 
-    Receive {
-        id: receive
 
+    // Receive component definition
+    Receive {
+        id: receive // Unique identifier for this Receive component
+
+        // Event handler for the 'onMessageReceived' signal
         onMessageReceived: function handleReceivedData(cooler_current, cooler_voltage, detector_current, detector_voltage) {
             coolerCurrent = cooler_current;
             coolerVoltage = cooler_voltage;
             detectorCurrent = detector_current;
             detectorVoltage = detector_voltage;
-            printProperties()
+
+            if(receivedAll === false){
+                squareObjectOn()
+                receivedAll = true;
+            }
+
+            // Call the printProperties() function to log the received data
+            printProperties();
+
         }
     }
 
@@ -272,6 +301,16 @@ Item {
         id: gridModel
     }
 
+    /**
+     * Prints the values of different properties related to cooler and detector readings.
+     *
+     * This function logs the values of cooler and detector properties to the console.
+     * It iterates through each property array and prints their respective values.
+     * - Prints the coolerCurrent array values.
+     * - Prints the coolerVoltage array values.
+     * - Prints the detectorCurrent array values.
+     * - Prints the detectorVoltage array values.
+     */
     function printProperties() {
         console.log("coolerCurrent:");
         for (var i = 0; i < coolerCurrent.length; i++) {
